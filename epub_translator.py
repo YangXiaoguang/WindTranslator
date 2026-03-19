@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# DEPRECATED: This single-file version has been superseded by the package at
+# src/epub_translator/. Install with `pip install -e .` and run via
+# `epub-translator` or `python -m epub_translator`.
 """
 EPUB to Chinese PDF Translator
 Reads an English EPUB, translates it to professional Chinese via a configurable
