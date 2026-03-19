@@ -224,18 +224,14 @@ def _build_client(cfg: TranslatorConfig):
         return _openai.OpenAI(**kwargs), "openai"
 
 
-class Translator:
-    SYSTEM_PROMPT = (
-        "你是一位专业翻译专家，将英文书籍原文译为简体中文。要求：\n"
-        "1. 译文专业、流畅，符合中文表达习惯\n"
-        "2. 保持原文语气与段落结构\n"
-        "3. 输入段落之间用 <<<SPLIT>>> 分隔，输出必须保持相同数量的段落，"
-        "   仍用 <<<SPLIT>>> 分隔，不得增删段落或添加任何说明文字"
-    )
+_SYSTEM_PROMPT_FILE = Path(__file__).parent / "system_prompt.md"
 
+
+class Translator:
     def __init__(self, cfg: TranslatorConfig):
         self.cfg = cfg
         self.client, self.client_type = _build_client(cfg)
+        self.SYSTEM_PROMPT = _SYSTEM_PROMPT_FILE.read_text(encoding="utf-8").strip()
 
     def _call_api(self, text: str) -> str:
         """Single API call with exponential backoff retry."""
