@@ -1,0 +1,29 @@
+# EPUB 翻译器配置文件
+# 复制此文件并填写你的 API Key
+
+# ── 模型服务商 ──────────────────────────────────────────────────────────────────
+# 可选值：
+#   anthropic   - Anthropic Claude（默认）
+#   openai      - OpenAI GPT 系列
+#   deepseek    - DeepSeek（OpenAI 兼容接口）
+#   custom      - 任意 OpenAI 兼容接口（需指定 base_url）
+#provider: anthropic
+provider: qwen
+# ── API Key ──────────────────────────────────────────────────────────────────────
+#api_key: YOUR_API_KEY_HERE
+api_key: sk-4c661f46c70e42ea9fcf6c229682d398
+# ── 模型名称 ─────────────────────────────────────────────────────────────────────
+# Anthropic 示例：claude-sonnet-4-6 / claude-opus-4-6 / claude-haiku-4-5-20251001
+# OpenAI 示例：  gpt-4o / gpt-4o-mini / gpt-4-turbo
+# DeepSeek 示例：deepseek-chat / deepseek-reasoner
+#model: claude-sonnet-4-6
+model: qwen-max
+
+# ── 自定义 API 地址（可选）────────────────────────────────────────────────────────
+# 仅 provider 为 openai / deepseek / custom 时需要（anthropic 无需填写）
+# DeepSeek 示例：https://api.deepseek.com/v1
+# OpenAI 默认留空即可
+# base_url: https://api.deepseek.com
+
+
+base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
