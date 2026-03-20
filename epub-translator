@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Wrapper script — no installation required.
+# Run from anywhere: ./epub-translator book.epub --list
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PYTHONPATH="$SCRIPT_DIR/src" exec python3 -m epub_translator "$@"

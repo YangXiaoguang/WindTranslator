@@ -18,15 +18,16 @@ DEFAULT_PROVIDER = "anthropic"
 DEFAULT_MODEL = "claude-sonnet-4-6"
 
 # ── Search paths ───────────────────────────────────────────────────────────────
-CONFIG_SEARCH_PATHS = [
-    Path.cwd() / "translator.yaml",
-    Path.home() / ".translator.yaml",
-]
+# Intentionally functions, not module-level constants: Path.cwd() must be
+# evaluated at call time, not at import time, so callers that change directory
+# after import still get the correct working-directory path.
 
-SYSTEM_PROMPT_SEARCH_PATHS = [
-    Path.cwd() / "system_prompt.md",
-    Path.home() / ".system_prompt.md",
-]
+def _config_search_paths() -> list:
+    return [Path.cwd() / "translator.yaml", Path.home() / ".translator.yaml"]
+
+
+def _system_prompt_search_paths() -> list:
+    return [Path.cwd() / "system_prompt.md", Path.home() / ".system_prompt.md"]
 
 
 @dataclass
@@ -44,7 +45,7 @@ class TranslatorConfig:
 
 def load_config(config_path: Optional[str] = None) -> TranslatorConfig:
     """Load config from YAML, falling back to env vars for missing fields."""
-    paths = ([Path(config_path)] if config_path else []) + CONFIG_SEARCH_PATHS
+    paths = ([Path(config_path)] if config_path else []) + _config_search_paths()
 
     data: dict = {}
     for p in paths:
@@ -70,7 +71,7 @@ def load_config(config_path: Optional[str] = None) -> TranslatorConfig:
     if "system_prompt_path" in data:
         cfg.system_prompt_path = Path(data["system_prompt_path"]).expanduser()
     else:
-        for sp in SYSTEM_PROMPT_SEARCH_PATHS:
+        for sp in _system_prompt_search_paths():
             if sp.exists():
                 cfg.system_prompt_path = sp
                 break

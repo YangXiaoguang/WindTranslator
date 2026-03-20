@@ -1,9 +1,8 @@
 import logging
-import sys
 from typing import Optional
 
 from .config import TranslatorConfig
-from .parser.epub import EPUBParser
+from .parser import get_parser
 from .translator.llm import LLMTranslator
 from .renderer.pdf import PDFRenderer
 from .utils.chapter_range import parse_chapter_range
@@ -11,30 +10,36 @@ from .utils.chapter_range import parse_chapter_range
 log = logging.getLogger(__name__)
 
 
+class PipelineError(RuntimeError):
+    """Raised for expected pipeline failures (bad input, bad range, etc.)."""
+
+
 class TranslationPipeline:
     """Orchestrates parse → translate → render."""
 
     def run(
         self,
-        epub_path: str,
+        input_path: str,
         output_path: str,
         cfg: TranslatorConfig,
         chapter_range: Optional[str] = None,
     ) -> None:
         # ── 1. Parse ──────────────────────────────────────────────────────────
-        log.info("[1/3] 解析 EPUB：%s", epub_path)
-        parser = EPUBParser(epub_path)
+        log.info("[1/3] 解析文件：%s", input_path)
+        parser = get_parser(input_path)
         book_title = parser.get_title()
         all_chapters = parser.get_chapters()
         log.info("      书名：%s", book_title)
         log.info("      全书章节数：%d", len(all_chapters))
 
+        if not all_chapters:
+            raise PipelineError("未提取到任何章节，请检查文件内容")
+
         if chapter_range:
             try:
                 indices = parse_chapter_range(chapter_range, len(all_chapters))
             except ValueError as e:
-                log.error("错误：%s", e)
-                sys.exit(1)
+                raise PipelineError(str(e)) from e
             chapters = [all_chapters[i] for i in indices]
             first, last = indices[0] + 1, indices[-1] + 1
             log.info(
