@@ -1,0 +1,38 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.pytest_cache
+build/
+dist/
+
+# Node
+web/node_modules
+web/.vite
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# Runtime data
+*.db
+uploads/
+outputs/
+
+# Environment
+.env
+.env.local
+
+# Docs & misc
+docs/
+archive/
+changlog/
+*.md
+!system_prompt.md
+LICENSE

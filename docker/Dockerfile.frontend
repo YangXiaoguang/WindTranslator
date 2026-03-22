@@ -1,0 +1,28 @@
+### Stage 1: Build ###
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+COPY web/package.json web/package-lock.json ./
+RUN npm ci
+
+COPY web/ .
+RUN npm run build
+
+### Stage 2: Serve ###
+FROM nginx:1.27-alpine
+
+# Install curl for healthcheck (more reliable than wget on alpine)
+RUN apk add --no-cache curl
+
+# Remove default config
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY docker/nginx.conf /etc/nginx/conf.d/windtranslator.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -sf http://localhost/health || exit 1
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

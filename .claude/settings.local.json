@@ -28,7 +28,11 @@
       "Bash(ls ~/Library/Python/3.9/bin/epub*)",
       "Bash(python3 -m pip install . --user)",
       "Bash(chmod +x /Users/xiaoguangyang/Downloads/res/WindTranslator/epub-translator)",
-      "Bash(/Users/xiaoguangyang/Downloads/res/WindTranslator/epub-translator --help)"
+      "Bash(/Users/xiaoguangyang/Downloads/res/WindTranslator/epub-translator --help)",
+      "Bash(pip install:*)",
+      "Bash(PYTHONPATH=src python3 -c \"from server.database import Base; from server.models import *; print\\(''Models loaded OK''\\)\")",
+      "Bash(PYTHONPATH=src python3 -c \"from server.database import Base; from server.models import *; print\\(''Models loaded OK''\\); print\\(''Tables:'', list\\(Base.metadata.tables.keys\\(\\)\\)\\)\")",
+      "Bash(PYTHONPATH=src python3 -m alembic init alembic)"
     ]
   }
 }

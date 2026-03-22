@@ -3,11 +3,12 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "epub-translator"
-version = "0.2.0"
-description = "Translate English EPUBs to Chinese PDF using LLM APIs"
+name = "wind-translator"
+version = "0.3.0"
+description = "Translate English EPUB/PDF ebooks to Chinese PDF — CLI + Web"
 requires-python = ">=3.9"
 dependencies = [
+    # ── 翻译引擎核心 ──
     "anthropic>=0.40",
     "openai>=1.0",
     "ebooklib>=0.18",
@@ -16,10 +17,28 @@ dependencies = [
     "pdfplumber>=0.11",
     "reportlab>=4.2",
     "pyyaml>=6.0",
+    # ── Web 后端 ──
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "sqlalchemy[asyncio]>=2.0",
+    "aiosqlite>=0.21",
+    "alembic>=1.14",
+    "celery[redis]>=5.4",
+    "redis>=5.0",
+    "cryptography>=44.0",
+    "python-multipart>=0.0.18",
+    "pydantic-settings>=2.7",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "pytest-mock>=3.14"]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.25",
+    "pytest-mock>=3.14",
+    "httpx>=0.28",
+    "aiosqlite>=0.21",
+]
+pg = ["asyncpg>=0.30"]
 
 [project.scripts]
 epub-translator = "epub_translator.cli:main"
@@ -30,3 +49,4 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+asyncio_mode = "auto"
